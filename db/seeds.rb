@@ -16,7 +16,8 @@ docs = [
     people: "Loïc",
     organizations: "Tax Administration",
     ocr_text: "This is a sample OCR text snippet for the income tax notice.",
-    ocr_status: "completed"
+    ocr_status: "completed",
+    metadata_status: "completed"
   },
   {
     title: "Car Insurance Policy",
@@ -25,7 +26,8 @@ docs = [
     people: "Loïc, Marie",
     organizations: "SafeDrive Insurance",
     ocr_text: "Sample policy summary captured by OCR.",
-    ocr_status: "completed"
+    ocr_status: "completed",
+    metadata_status: "completed"
   }
 ]
 

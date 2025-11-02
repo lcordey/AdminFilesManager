@@ -12,6 +12,13 @@ class Document < ApplicationRecord
     failed: "failed"
   }, _suffix: :status
 
+  enum metadata_status: {
+    pending: "pending",
+    processing: "processing",
+    completed: "completed",
+    failed: "failed"
+  }, _suffix: :metadata_status
+
   validates :title, presence: true
   validates :category, presence: true
   validate :file_must_be_attached
@@ -43,10 +50,23 @@ class Document < ApplicationRecord
     OCR_SUPPORTED_TYPES.include?(file.content_type)
   end
 
+  def reprocess!
+    update!(
+      ocr_status: "pending",
+      metadata_status: "pending",
+      ocr_text: nil,
+      ocr_error_message: nil,
+      metadata_error_message: nil
+    )
+
+    OcrExtractionJob.perform_later(id)
+  end
+
   private
 
   def set_defaults
     self.ocr_status ||= "pending"
+    self.metadata_status ||= "pending"
   end
 
   def enqueue_ocr_extraction

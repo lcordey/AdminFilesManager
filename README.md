@@ -32,6 +32,7 @@ Active Storage is configured for local disk storage in development and test. Upl
 - Single-field upload form; metadata (title, description, category, people, organizations) is auto-filled via the Mistral APIs.
 - Metadata-aware document list with keyword search across title, category, people, and organizations.
 - Background OCR extraction using Active Job; extracted text is stored on each document for future search capabilities.
+- Processing dashboard that surfaces OCR and metadata statuses, error messages, and a one-click reprocess action.
 - Detail page that surfaces metadata, download link, and OCR results.
 
 ## Testing

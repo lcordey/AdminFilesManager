@@ -1,5 +1,5 @@
 class DocumentsController < ApplicationController
-  before_action :set_document, only: :show
+  before_action :set_document, only: %i[show reprocess]
 
   def index
     @search_query = params[:q].to_s.strip
@@ -21,6 +21,13 @@ class DocumentsController < ApplicationController
       @documents = Document.recent
       render :index, status: :unprocessable_entity
     end
+  end
+
+  def reprocess
+    @document.reprocess!
+    redirect_to documents_path, notice: "Document reprocessing started."
+  rescue StandardError => e
+    redirect_to documents_path, alert: "Unable to reprocess document: #{e.message}"
   end
 
   private

@@ -6,10 +6,19 @@
       <h1><%= @document.title %></h1>
       <p class="meta">
         <span>Category: <strong><%= @document.category %></strong></span>
-        <span>Status: <strong><%= @document.ocr_status %></strong></span>
+        <span>OCR: <span class="status status--<%= @document.ocr_status %>"><%= @document.ocr_status %></span></span>
+        <span>Metadata: <span class="status status--<%= @document.metadata_status %>"><%= @document.metadata_status %></span></span>
         <span>Uploaded: <%= l(@document.created_at, format: :long) %></span>
       </p>
     </header>
+
+    <% if @document.ocr_error_message.present? %>
+      <p class="status-message status-message--error">OCR error: <%= @document.ocr_error_message %></p>
+    <% end %>
+
+    <% if @document.metadata_error_message.present? %>
+      <p class="status-message status-message--error">Metadata error: <%= @document.metadata_error_message %></p>
+    <% end %>
 
     <% if @document.description.present? %>
       <section>
@@ -47,5 +56,11 @@
         <p>OCR text unavailable. Check logs or retry once the OCR service is configured.</p>
       <% end %>
     </section>
+
+    <% if @document.failed_status? || @document.failed_metadata_status? %>
+      <section>
+        <%= button_to "Retry processing", reprocess_document_path(@document), method: :post, class: "button button--secondary" %>
+      </section>
+    <% end %>
   </article>
 </div>

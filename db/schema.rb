@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_02_201659) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_02_204623) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -49,6 +49,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_02_201659) do
     t.string "ocr_status", default: "pending", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "metadata_status", default: "pending", null: false
+    t.text "metadata_error_message"
+    t.text "ocr_error_message"
     t.index ["category"], name: "index_documents_on_category"
     t.index ["ocr_status"], name: "index_documents_on_ocr_status"
     t.index ["title"], name: "index_documents_on_title"

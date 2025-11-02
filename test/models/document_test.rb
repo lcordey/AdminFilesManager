@@ -42,6 +42,31 @@ class DocumentTest < ActiveSupport::TestCase
     document.save!
     assert_equal "Sample", document.title
     assert_equal "Uncategorized", document.category
+    assert_equal "pending", document.metadata_status
+    assert_equal "pending", document.ocr_status
+  end
+
+  test "reprocess resets statuses and enqueues job" do
+    document = build_document
+    document.skip_ocr_job = true
+    document.save!
+
+    document.update!(
+      ocr_status: "failed",
+      metadata_status: "failed",
+      ocr_error_message: "something broke",
+      metadata_error_message: "metadata failed"
+    )
+
+    assert_enqueued_with(job: OcrExtractionJob, args: [document.id]) do
+      document.reprocess!
+    end
+
+    document.reload
+    assert_equal "pending", document.ocr_status
+    assert_equal "pending", document.metadata_status
+    assert_nil document.ocr_error_message
+    assert_nil document.metadata_error_message
   end
 
   private

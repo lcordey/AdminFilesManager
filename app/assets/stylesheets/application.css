@@ -92,6 +92,11 @@ input[type="submit"],
   padding: 0.2rem 0;
 }
 
+.button--secondary {
+  background-color: #475569;
+  margin-left: 0.75rem;
+}
+
 .flash {
   padding: 0.8rem 1rem;
   border-radius: 8px;
@@ -143,6 +148,41 @@ input[type="submit"],
   gap: 1rem;
   flex-wrap: wrap;
   margin: 0 0 0.5rem;
+}
+
+.status {
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status--pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status--processing {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.status--completed {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status--failed {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-message {
+  margin: 0.25rem 0;
+}
+
+.status-message--error {
+  color: #b91c1c;
 }
 
 .actions {

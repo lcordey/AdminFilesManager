@@ -13,8 +13,8 @@
    - Choose adapter (Sidekiq/Delayed Job) for enqueueing OCR + metadata jobs outside web thread.
    - Add retry/backoff strategies and failure alerts/logging.
 3. **Robust Error Surfacing**
-   - Show OCR/metadata failures in the UI with retry actions.
-   - Persist error messages or status timestamps for auditability.
+   - Persist processing history (timestamps, attempt counts) for auditability.
+   - Add user notifications (email/Slack) when processing fails repeatedly.
 4. **Search Enhancements**
    - Index OCR text (e.g., PgSearch/SQLite FTS) and enable filtering by category/people/organizations.
 5. **Authentication & Authorization**
