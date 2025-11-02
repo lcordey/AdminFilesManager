@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
+
+cd "$ROOT_DIR"
+
+bundle exec rails server

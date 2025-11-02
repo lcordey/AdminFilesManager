@@ -4,28 +4,15 @@ Monolithic Ruby on Rails application that centralizes household administration d
 
 ## Getting Started
 
-1. Ensure Ruby 3.0.2 and Bundler are available. Install project gems:
+1. Run the bootstrap script the first time (installs gems, prepares DB, seeds demo docs, and ensures `.env` exists):
    ```bash
-   export PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
-   bundle install
+   ./scripts/setup
    ```
-2. Copy environment template and populate secrets:
+2. Start the app any time with:
    ```bash
-   cp .env.example .env
-   # edit .env to provide Mistral credentials
+   ./scripts/server
    ```
-3. Create and migrate the SQLite database:
-   ```bash
-   bundle exec rails db:prepare
-   ```
-4. Populate sample documents (optional but useful when exploring the UI):
-   ```bash
-   bundle exec rails db:seed
-   ```
-5. Launch the development server and open http://localhost:3000:
-   ```bash
-   bundle exec rails server
-   ```
+   Then open http://localhost:3000 in your browser.
 
 ## Configuration
 

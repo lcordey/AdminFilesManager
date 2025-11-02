@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
+
+cd "$ROOT_DIR"
+
+if [[ ! -f ".env" ]]; then
+  cp .env.example .env
+  echo "Created .env from template. Update it with your Mistral credentials." >&2
+fi
+
+bundle install
+bundle exec rails db:prepare
+bundle exec rails db:seed
+
+echo "Setup complete. Launch the app with ./scripts/server" >&2
