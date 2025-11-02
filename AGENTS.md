@@ -7,7 +7,8 @@
 
 ## Project Structure & Responsibilities
 - `app/models/document.rb`: core record, attaches files, tracks `ocr_status` + `metadata_status`, stores error messages, and queues OCR/metadata jobs. Exposes `reprocess!` to reset and requeue.
-- `app/jobs/ocr_extraction_job.rb` & `app/jobs/metadata_enrichment_job.rb`: background pipeline; update here when adding retries/backoff or additional status bookkeeping.
+- `app/jobs/ocr_extraction_job.rb` & `app/jobs/metadata_enrichment_job.rb`: background pipeline; update here when tweaking retries/backoff or status handling.
+- `app/models/processing_log.rb` & `app/services/processing_logger.rb`: central place to persist request/response snapshots for OCR + metadata calls. Inspect via `ProcessingLog.recent` in console.
 - `app/services/ocr/mistral_client.rb` & `app/services/metadata/mistral_client.rb`: HTTP clients for OCR and chat endpoints; keep request/response schemas in sync with upstream APIs.
 - `app/controllers/documents_controller.rb` + `app/views/documents/`: upload form (file-only), listing, detail view.
 - `db/seeds.rb`: seeds two sample docs using `db/seeds/files/sample.pdf` for demo state.
@@ -20,6 +21,7 @@
 - Tests: `bundle exec rails test`.
 - Background jobs currently run inline; start a dedicated worker later via `bin/rails jobs:work`.
 - Retry failed processing from the browser via the "Retry processing" button (POST `/documents/:id/reprocess`), or manually call `Document#reprocess!` in the console.
+- Review processing history: `ProcessingLog.order(created_at: :desc).limit(20)`.
 
 ## Configuration & Secrets
 - `.env` (ignored by git) must define:

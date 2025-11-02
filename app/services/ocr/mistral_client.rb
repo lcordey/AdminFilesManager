@@ -23,9 +23,16 @@ module Ocr
     def extract_text(document)
       document.file.blob.open do |file_io|
         payload = build_payload(file_io, document.file.filename.to_s, document.file.content_type)
+        log_request(document, payload)
+
         response = post_json(payload)
+        log_response(document, response)
+
         parse_response(response)
       end
+    rescue ApiError => e
+      log_error(document, e)
+      raise
     end
 
     private
@@ -54,6 +61,41 @@ module Ocr
       raise ApiError, e.message
     end
 
+    def log_request(document, payload)
+      summary = payload.dup
+      summary.delete(:content)
+      summary[:content_bytes] = payload[:content]&.bytesize
+
+      ProcessingLogger.log(
+        document: document,
+        stage: "ocr",
+        direction: "request",
+        status: "pending",
+        payload: summary.to_json
+      )
+    end
+
+    def log_response(document, response)
+      ProcessingLogger.log(
+        document: document,
+        stage: "ocr",
+        direction: "response",
+        status: response.is_a?(Net::HTTPSuccess) ? "success" : "error",
+        payload: safe_response_body(response),
+        response_code: response&.code&.to_i
+      )
+    end
+
+    def log_error(document, error)
+      ProcessingLogger.log(
+        document: document,
+        stage: "ocr",
+        direction: "response",
+        status: "error",
+        message: error.message
+      )
+    end
+
     def parse_response(response)
       unless response.is_a?(Net::HTTPSuccess)
         raise ApiError, "OCR request failed with status #{response&.code}"
@@ -63,6 +105,13 @@ module Ocr
       json.fetch("text")
     rescue JSON::ParserError
       raise ApiError, "Unexpected response format from OCR service"
+    end
+
+    def safe_response_body(response)
+      return unless response
+
+      body = response.body.to_s
+      body.length > 2000 ? body[0...1997] + "..." : body
     end
   end
 end

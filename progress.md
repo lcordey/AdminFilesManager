@@ -15,6 +15,7 @@
 3. **Robust Error Surfacing**
    - Persist processing history (timestamps, attempt counts) for auditability.
    - Add user notifications (email/Slack) when processing fails repeatedly.
+   - Build a simple admin view to browse `ProcessingLog` entries in the UI.
 4. **Search Enhancements**
    - Index OCR text (e.g., PgSearch/SQLite FTS) and enable filtering by category/people/organizations.
 5. **Authentication & Authorization**

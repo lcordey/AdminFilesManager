@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_02_204623) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_02_205251) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -57,6 +57,22 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_02_204623) do
     t.index ["title"], name: "index_documents_on_title"
   end
 
+  create_table "processing_logs", force: :cascade do |t|
+    t.integer "document_id", null: false
+    t.string "stage", null: false
+    t.string "direction", null: false
+    t.string "status", null: false
+    t.text "payload"
+    t.text "message"
+    t.integer "response_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_processing_logs_on_created_at"
+    t.index ["document_id", "stage"], name: "index_processing_logs_on_document_id_and_stage"
+    t.index ["document_id"], name: "index_processing_logs_on_document_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "processing_logs", "documents"
 end

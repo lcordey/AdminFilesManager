@@ -26,9 +26,17 @@ module Metadata
       @model = model
     end
 
-    def extract_metadata(ocr_text, filename: nil)
-      response = post_json(build_payload(ocr_text, filename))
+    def extract_metadata(ocr_text, filename: nil, document: nil)
+      payload = build_payload(ocr_text, filename)
+      log_request(document, payload) if document
+
+      response = post_json(payload)
+      log_response(document, response) if document
+
       parse_response(response)
+    rescue ApiError => e
+      log_error(document, e) if document
+      raise
     end
 
     private
@@ -107,6 +115,57 @@ module Metadata
       }.with_indifferent_access.symbolize_keys
     rescue JSON::ParserError
       raise ApiError, "Unexpected response format from metadata service"
+    end
+
+    def log_request(document, payload)
+      summary = payload.dup
+      summary[:messages] = summary[:messages].map do |message|
+        content = message[:content].to_s
+        message.merge(content: truncate(content))
+      end
+
+      ProcessingLogger.log(
+        document: document,
+        stage: "metadata",
+        direction: "request",
+        status: "pending",
+        payload: summary.to_json
+      )
+    end
+
+    def log_response(document, response)
+      ProcessingLogger.log(
+        document: document,
+        stage: "metadata",
+        direction: "response",
+        status: response.is_a?(Net::HTTPSuccess) ? "success" : "error",
+        payload: safe_response_body(response),
+        response_code: response&.code&.to_i
+      )
+    end
+
+    def log_error(document, error)
+      ProcessingLogger.log(
+        document: document,
+        stage: "metadata",
+        direction: "response",
+        status: "error",
+        message: error.message
+      )
+    end
+
+    def truncate(content)
+      text = content.to_s
+      return text if text.length <= 2000
+
+      text[0...1997] + "..."
+    end
+
+    def safe_response_body(response)
+      return unless response
+
+      body = response.body.to_s
+      body.length > 2000 ? body[0...1997] + "..." : body
     end
   end
 end

@@ -10,7 +10,8 @@ class MetadataEnrichmentJob < ApplicationJob
     client = Metadata::MistralClient.new
     metadata = client.extract_metadata(
       document.ocr_text,
-      filename: document.file&.filename&.to_s
+      filename: document.file&.filename&.to_s,
+      document: document
     )
 
     document.update!(

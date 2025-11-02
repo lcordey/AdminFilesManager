@@ -34,6 +34,15 @@ Active Storage is configured for local disk storage in development and test. Upl
 - Background OCR extraction using Active Job; extracted text is stored on each document for future search capabilities.
 - Processing dashboard that surfaces OCR and metadata statuses, error messages, and a one-click reprocess action.
 - Detail page that surfaces metadata, download link, and OCR results.
+- Processing logs persisted in the database (`processing_logs` table) capturing request/response summaries for both OCR and metadata calls.
+
+## Observability
+
+- Inspect recent processing logs in the Rails console:
+  ```ruby
+  ProcessingLog.order(created_at: :desc).limit(20)
+  ```
+- Each log entry records the stage (`ocr`/`metadata`), direction (`request`/`response`), status, response code, and truncated payload/message so you can audit interactions with Mistral retroactively.
 
 ## Testing
 

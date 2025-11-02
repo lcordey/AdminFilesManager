@@ -14,7 +14,7 @@ class MetadataEnrichmentJobTest < ActiveJob::TestCase
     document.save!
 
     fake_client = Class.new do
-      def extract_metadata(_text, filename:)
+      def extract_metadata(_text, filename:, document:)
         {
           title: "2024 Tax Notice",
           description: "Annual summary for Loïc Cordey",
