@@ -18,7 +18,11 @@ Monolithic Ruby on Rails application that centralizes household administration d
    ```bash
    bundle exec rails db:prepare
    ```
-4. Launch the development server and open http://localhost:3000:
+4. Populate sample documents (optional but useful when exploring the UI):
+   ```bash
+   bundle exec rails db:seed
+   ```
+5. Launch the development server and open http://localhost:3000:
    ```bash
    bundle exec rails server
    ```

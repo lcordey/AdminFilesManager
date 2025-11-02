@@ -31,6 +31,15 @@ class DocumentTest < ActiveSupport::TestCase
     end
   end
 
+  test "skips ocr job when flag is set" do
+    document = build_document
+    document.skip_ocr_job = true
+
+    assert_no_enqueued_jobs only: OcrExtractionJob do
+      assert document.save
+    end
+  end
+
   private
 
   def build_document(content_type: "application/pdf")

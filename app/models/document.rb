@@ -1,4 +1,6 @@
 class Document < ApplicationRecord
+  attr_accessor :skip_ocr_job
+
   OCR_SUPPORTED_TYPES = %w[application/pdf image/png image/jpeg image/tiff].freeze
 
   has_one_attached :file
@@ -47,6 +49,7 @@ class Document < ApplicationRecord
   end
 
   def enqueue_ocr_extraction
+    return if skip_ocr_job
     return unless supports_ocr?
 
     OcrExtractionJob.perform_later(id)
