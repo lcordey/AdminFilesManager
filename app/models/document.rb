@@ -16,6 +16,7 @@ class Document < ApplicationRecord
   validates :category, presence: true
   validate :file_must_be_attached
 
+  before_validation :populate_defaults_from_file, on: :create
   after_initialize :set_defaults
   after_commit :enqueue_ocr_extraction, on: :create
 
@@ -61,5 +62,16 @@ class Document < ApplicationRecord
 
   def file_must_be_attached
     errors.add(:file, "must be attached") unless file.attached?
+  end
+
+  def populate_defaults_from_file
+    return unless file.attached?
+
+    self.title = default_title if title.blank?
+    self.category = "Uncategorized" if category.blank?
+  end
+
+  def default_title
+    file.filename.to_s.gsub(/\.\w+\z/, "").titleize
   end
 end

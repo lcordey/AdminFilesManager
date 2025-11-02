@@ -9,7 +9,7 @@ class OcrExtractionJobTest < ActiveJob::TestCase
   end
 
   test "stores extracted text when OCR succeeds" do
-    document = Document.new(title: "Invoice", category: "Finance")
+    document = Document.new
     document.file.attach(
       io: file_fixture("sample.pdf").open,
       filename: "sample.pdf",
@@ -24,7 +24,9 @@ class OcrExtractionJobTest < ActiveJob::TestCase
     end.new
 
     Ocr::MistralClient.stub :new, fake_client do
-      OcrExtractionJob.perform_now(document.id)
+      assert_enqueued_with(job: MetadataEnrichmentJob, args: [document.id]) do
+        OcrExtractionJob.perform_now(document.id)
+      end
     end
 
     document.reload

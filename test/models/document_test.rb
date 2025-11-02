@@ -12,14 +12,10 @@ class DocumentTest < ActiveSupport::TestCase
     ActiveJob::Base.queue_adapter = @original_queue_adapter
   end
 
-  test "is valid with required attributes and attached file" do
-    document = build_document
-    assert document.valid?
-  end
-
   test "requires a file attachment" do
-    document = Document.new(title: "Missing file", category: "Tax")
-    assert_not document.valid?
+    document = Document.new
+    document.validate
+    assert document.errors[:file].present?
     assert_includes document.errors[:file], "must be attached"
   end
 
@@ -40,10 +36,18 @@ class DocumentTest < ActiveSupport::TestCase
     end
   end
 
+  test "populates title and category defaults from filename" do
+    document = build_document
+    assert document.valid?
+    document.save!
+    assert_equal "Sample", document.title
+    assert_equal "Uncategorized", document.category
+  end
+
   private
 
   def build_document(content_type: "application/pdf")
-    Document.new(title: "Payslip", category: "Income").tap do |doc|
+    Document.new.tap do |doc|
       doc.file.attach(
         io: file_fixture("sample.pdf").open,
         filename: "sample.pdf",

@@ -12,8 +12,6 @@ class DocumentsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Document.count", 1) do
       post documents_url, params: {
         document: {
-          title: "Driver license renewal",
-          category: "Driving",
           file: file
         }
       }

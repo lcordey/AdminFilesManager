@@ -28,6 +28,7 @@
 
   <section class="panel">
     <h2>Upload a Document</h2>
+    <p class="hint">Drop a PDF or image and the system will fill in title, category, participants, and organizations using the Mistral APIs.</p>
     <%= form_with model: @document, url: documents_path, local: true, html: { multipart: true } do |form| %>
       <% if @document.errors.any? %>
         <div class="form-errors">
@@ -41,32 +42,7 @@
       <% end %>
 
       <div class="field">
-        <%= form.label :title %>
-        <%= form.text_field :title, required: true %>
-      </div>
-
-      <div class="field">
-        <%= form.label :description %>
-        <%= form.text_area :description, rows: 3 %>
-      </div>
-
-      <div class="field">
-        <%= form.label :category %>
-        <%= form.text_field :category, placeholder: "e.g., Tax, Insurance, Driving" %>
-      </div>
-
-      <div class="field">
-        <%= form.label :people, "People (comma separated)" %>
-        <%= form.text_field :people, placeholder: "Loïc, Marie" %>
-      </div>
-
-      <div class="field">
-        <%= form.label :organizations, "Organizations (comma separated)" %>
-        <%= form.text_field :organizations, placeholder: "Government, School" %>
-      </div>
-
-      <div class="field">
-        <%= form.label :file %>
+        <%= form.label :file, "Document file" %>
         <%= form.file_field :file, required: true, accept: ".pdf,image/*" %>
       </div>
 

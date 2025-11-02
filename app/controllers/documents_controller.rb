@@ -30,13 +30,6 @@ class DocumentsController < ApplicationController
   end
 
   def document_params
-    params.require(:document).permit(
-      :title,
-      :description,
-      :category,
-      :people,
-      :organizations,
-      :file
-    )
+    params.require(:document).permit(:file)
   end
 end
