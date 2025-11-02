@@ -1,0 +1,109 @@
+<div class="container">
+  <header>
+    <h1>Household Admin Documents</h1>
+    <p class="subtitle">Upload, categorize, and track documents with automatic OCR extraction.</p>
+  </header>
+
+  <% if notice.present? %>
+    <div class="flash flash--notice"><%= notice %></div>
+  <% end %>
+
+  <% if alert.present? %>
+    <div class="flash flash--alert"><%= alert %></div>
+  <% end %>
+
+  <section class="panel">
+    <h2>Search</h2>
+    <%= form_with url: documents_path, method: :get, local: true, class: "search-form" do |form| %>
+      <div class="field">
+        <%= form.label :q, "Keyword" %>
+        <%= form.search_field :q, value: @search_query, placeholder: "Search by title, category, person, or organization" %>
+      </div>
+      <%= form.submit "Search" %>
+      <% if @search_query.present? %>
+        <%= link_to "Clear", documents_path, class: "button button--text" %>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="panel">
+    <h2>Upload a Document</h2>
+    <%= form_with model: @document, url: documents_path, local: true, html: { multipart: true } do |form| %>
+      <% if @document.errors.any? %>
+        <div class="form-errors">
+          <h3><%= pluralize(@document.errors.count, "error") %> prevented this document from being saved:</h3>
+          <ul>
+            <% @document.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= form.label :title %>
+        <%= form.text_field :title, required: true %>
+      </div>
+
+      <div class="field">
+        <%= form.label :description %>
+        <%= form.text_area :description, rows: 3 %>
+      </div>
+
+      <div class="field">
+        <%= form.label :category %>
+        <%= form.text_field :category, placeholder: "e.g., Tax, Insurance, Driving" %>
+      </div>
+
+      <div class="field">
+        <%= form.label :people, "People (comma separated)" %>
+        <%= form.text_field :people, placeholder: "Loïc, Marie" %>
+      </div>
+
+      <div class="field">
+        <%= form.label :organizations, "Organizations (comma separated)" %>
+        <%= form.text_field :organizations, placeholder: "Government, School" %>
+      </div>
+
+      <div class="field">
+        <%= form.label :file %>
+        <%= form.file_field :file, required: true, accept: ".pdf,image/*" %>
+      </div>
+
+      <%= form.submit "Upload document" %>
+    <% end %>
+  </section>
+
+  <section class="panel">
+    <h2>Recent documents</h2>
+    <% if @documents.any? %>
+      <ul class="document-list">
+        <% @documents.each do |document| %>
+          <li class="document-list__item">
+            <div>
+              <h3><%= link_to document.title, document_path(document) %></h3>
+              <p class="meta">
+                <span>Category: <strong><%= document.category %></strong></span>
+                <span>Status: <strong><%= document.ocr_status %></strong></span>
+                <span>Uploaded: <%= l(document.created_at, format: :short) %></span>
+              </p>
+              <% if document.people.present? %>
+                <p class="meta">People: <%= document.people %></p>
+              <% end %>
+              <% if document.organizations.present? %>
+                <p class="meta">Organizations: <%= document.organizations %></p>
+              <% end %>
+            </div>
+            <div class="actions">
+              <% if document.file.attached? %>
+                <%= link_to "Download", rails_blob_path(document.file, disposition: "attachment"), class: "button" %>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No documents uploaded yet.</p>
+    <% end %>
+  </section>
+</div>

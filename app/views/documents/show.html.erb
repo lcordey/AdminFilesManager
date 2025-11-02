@@ -1,0 +1,51 @@
+<div class="container">
+  <%= link_to "← Back to documents", documents_path, class: "button button--text" %>
+
+  <article class="panel">
+    <header>
+      <h1><%= @document.title %></h1>
+      <p class="meta">
+        <span>Category: <strong><%= @document.category %></strong></span>
+        <span>Status: <strong><%= @document.ocr_status %></strong></span>
+        <span>Uploaded: <%= l(@document.created_at, format: :long) %></span>
+      </p>
+    </header>
+
+    <% if @document.description.present? %>
+      <section>
+        <h2>Description</h2>
+        <p><%= simple_format(@document.description) %></p>
+      </section>
+    <% end %>
+
+    <section>
+      <h2>Metadata</h2>
+      <dl class="metadata">
+        <dt>People</dt>
+        <dd><%= @document.people.presence || "Not specified" %></dd>
+        <dt>Organizations</dt>
+        <dd><%= @document.organizations.presence || "Not specified" %></dd>
+      </dl>
+    </section>
+
+    <% if @document.file.attached? %>
+      <section>
+        <h2>File</h2>
+        <p>
+          <%= link_to "Download original file", rails_blob_path(@document.file, disposition: "attachment"), class: "button" %>
+        </p>
+      </section>
+    <% end %>
+
+    <section>
+      <h2>OCR Text</h2>
+      <% if @document.completed_status? && @document.ocr_text.present? %>
+        <pre class="ocr-text"><%= @document.ocr_text %></pre>
+      <% elsif @document.processing_status? || @document.pending_status? %>
+        <p>OCR processing is queued. Refresh the page in a moment.</p>
+      <% else %>
+        <p>OCR text unavailable. Check logs or retry once the OCR service is configured.</p>
+      <% end %>
+    </section>
+  </article>
+</div>

@@ -13,3 +13,154 @@
  *= require_tree .
  *= require_self
  */
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #f5f7fb;
+  color: #1f2933;
+  margin: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+header h1 {
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  margin-top: 0;
+  color: #52606d;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+input[type="text"],
+input[type="search"],
+textarea {
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #cbd2d9;
+  font-size: 1rem;
+}
+
+input[type="file"] {
+  margin-top: 0.5rem;
+}
+
+input[type="submit"],
+.button {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border-radius: 999px;
+  border: none;
+  background-color: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.button--text {
+  background: none;
+  color: #2563eb;
+  padding: 0.2rem 0;
+}
+
+.flash {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.flash--notice {
+  background-color: #ecfdf5;
+  color: #047857;
+}
+
+.flash--alert {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.form-errors {
+  background-color: #fef3c7;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.document-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.document-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.document-list__item:last-child {
+  border-bottom: none;
+}
+
+.document-list__item h3 {
+  margin: 0 0 0.5rem;
+}
+
+.meta {
+  color: #52606d;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0 0 0.5rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.metadata {
+  display: grid;
+  grid-template-columns: 120px auto;
+  gap: 0.5rem 1.5rem;
+}
+
+.metadata dt {
+  font-weight: 600;
+}
+
+.ocr-text {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  max-height: 320px;
+  overflow-y: auto;
+}

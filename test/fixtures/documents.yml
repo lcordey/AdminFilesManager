@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: Utility Bill
+  description: Latest electricity bill for reference
+  category: Utilities
+  people: Loïc
+  organizations: Power Company
+  ocr_text:
+  ocr_status: pending
+
+two:
+  title: School Registration
+  description: Enrollment confirmation for the kids
+  category: Kids
+  people: Lea, Max
+  organizations: Local School
+  ocr_text:
+  ocr_status: pending
